@@ -131,7 +131,7 @@ export class MockTaxRateService {
 }
 
 export function createOrder(
-    orderConfig: Partial<Omit<Order, 'lines', 'surcharges'>> & {
+    orderConfig: Partial<Omit<Order, 'lines' | 'surcharges'>> & {
         ctx: RequestContext;
         lines: Array<{
             listPrice: number;
@@ -142,7 +142,15 @@ export function createOrder(
     },
 ): Order {
     const lines = orderConfig.lines.map(
-        ({ listPrice, taxCategory, quantity }) =>
+        ({
+            listPrice,
+            taxCategory,
+            quantity,
+        }: {
+            listPrice: number;
+            taxCategory: TaxCategory;
+            quantity: number;
+        }) =>
             new OrderLine({
                 taxCategory,
                 quantity,

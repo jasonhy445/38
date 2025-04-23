@@ -184,7 +184,9 @@ export class OrderCalculator {
         for (const line of order.lines) {
             // Must be re-calculated for each line, since the previous lines may have triggered promotions
             // which affected the order price.
-            const applicablePromotions = await filterAsync(promotions, p => p.test(ctx, order).then(Boolean));
+            const applicablePromotions = await filterAsync(promotions, (p: Promotion) =>
+                p.test(ctx, order).then(Boolean),
+            );
             line.clearAdjustments();
 
             for (const promotion of applicablePromotions) {
@@ -234,7 +236,7 @@ export class OrderCalculator {
         }
 
         this.calculateOrderTotals(order);
-        const applicableOrderPromotions = await filterAsync(promotions, p =>
+        const applicableOrderPromotions = await filterAsync(promotions, (p: Promotion) =>
             p.test(ctx, order).then(Boolean),
         );
         if (applicableOrderPromotions.length) {
@@ -276,7 +278,7 @@ export class OrderCalculator {
     }
 
     private async applyShippingPromotions(ctx: RequestContext, order: Order, promotions: Promotion[]) {
-        const applicableOrderPromotions = await filterAsync(promotions, p =>
+        const applicableOrderPromotions = await filterAsync(promotions, (p: Promotion) =>
             p.test(ctx, order).then(Boolean),
         );
         if (applicableOrderPromotions.length) {
